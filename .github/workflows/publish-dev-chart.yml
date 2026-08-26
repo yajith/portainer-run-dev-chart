@@ -56,7 +56,7 @@ jobs:
           VERSION="${{ steps.version.outputs.version }}"
           # Overwrite both version fields; appVersion stays as the dev image tag.
           sed -i "s/^version:.*/version: ${VERSION}/" /tmp/chart/Chart.yaml
-          sed -i "s/^appVersion:.*/appVersion: '${VERSION}'/" /tmp/chart/Chart.yaml
+          sed -i "s/^appVersion:.*/appVersion: ${VERSION}/" /tmp/chart/Chart.yaml
           echo "--- Chart.yaml after stamping ---"
           cat /tmp/chart/Chart.yaml
 
@@ -74,9 +74,9 @@ jobs:
 
       - name: Push OCI chart to GHCR
         run: |
-          CHART_PKG=$(ls /tmp/pkg/*.tgz)
-          helm push "${CHART_PKG}" "oci://ghcr.io/${{ github.repository_owner }}/charts"
-          echo "Pushed ${CHART_PKG} to oci://ghcr.io/${{ github.repository_owner }}/charts"
+          CHART_PKGS=(/tmp/pkg/*.tgz)
+          helm push "${CHART_PKGS[0]}" "oci://ghcr.io/${{ github.repository_owner }}/charts"
+          echo "Pushed ${CHART_PKGS[0]} to oci://ghcr.io/${{ github.repository_owner }}/charts"
 
       # ── Classic Helm repo (gh-pages) ─────────────────────────────────────────
       - name: Update Helm repo index on gh-pages
