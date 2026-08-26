@@ -1,0 +1,108 @@
+name: Publish dev chart
+
+on:
+  # Run on every push to the develop branch of portainer/portainer-run via
+  # repository_dispatch, or manually.
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: 'Git ref in portainer/portainer-run to package (default: develop)'
+        required: false
+        default: develop
+  schedule:
+    # Poll once a day so the dev chart stays reasonably fresh even without
+    # an explicit trigger.
+    - cron: '0 3 * * *'
+
+permissions:
+  contents: write      # push gh-pages index
+  packages: write      # push OCI chart to GHCR
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_REPO: portainer/portainer-run
+      SOURCE_REF: ${{ github.event.inputs.source_ref || 'develop' }}
+
+    steps:
+      - name: Checkout this repo (gh-pages branch for index)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'latest'
+
+      - name: Fetch source chart
+        run: |
+          # Clone only the chart/ directory from the source repo at the target ref.
+          git clone --depth 1 --branch "$SOURCE_REF" \
+            "https://github.com/${SOURCE_REPO}.git" /tmp/source-repo
+          cp -r /tmp/source-repo/chart /tmp/chart
+
+      - name: Resolve source SHA and derive dev version
+        id: version
+        run: |
+          sha=$(git -C /tmp/source-repo rev-parse --short HEAD)
+          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
+          # Use a 0.0.0-dev pre-release so it sorts below every real release.
+          echo "version=0.0.0-dev.${sha}" >> "$GITHUB_OUTPUT"
+
+      - name: Stamp dev version into Chart.yaml
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          # Overwrite both version fields; appVersion stays as the dev image tag.
+          sed -i "s/^version:.*/version: ${VERSION}/" /tmp/chart/Chart.yaml
+          sed -i "s/^appVersion:.*/appVersion: '${VERSION}'/" /tmp/chart/Chart.yaml
+          echo "--- Chart.yaml after stamping ---"
+          cat /tmp/chart/Chart.yaml
+
+      - name: Package chart
+        run: |
+          mkdir -p /tmp/pkg
+          helm package /tmp/chart --destination /tmp/pkg
+          echo "Packaged: $(ls /tmp/pkg)"
+
+      # ── OCI / GHCR ──────────────────────────────────────────────────────────
+      - name: Log in to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            helm registry login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Push OCI chart to GHCR
+        run: |
+          CHART_PKG=$(ls /tmp/pkg/*.tgz)
+          helm push "${CHART_PKG}" "oci://ghcr.io/${{ github.repository_owner }}/charts"
+          echo "Pushed ${CHART_PKG} to oci://ghcr.io/${{ github.repository_owner }}/charts"
+
+      # ── Classic Helm repo (gh-pages) ─────────────────────────────────────────
+      - name: Update Helm repo index on gh-pages
+        run: |
+          # Switch to or create a gh-pages branch.
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git ls-remote --exit-code origin gh-pages > /dev/null 2>&1; then
+            git fetch origin gh-pages:gh-pages
+            git checkout gh-pages
+          else
+            git checkout --orphan gh-pages
+            git rm -rf . > /dev/null 2>&1 || true
+          fi
+
+          # Copy the new package into the repo root.
+          cp /tmp/pkg/*.tgz .
+
+          # Merge with any existing index.yaml so old versions stay listed.
+          if [ -f index.yaml ]; then
+            helm repo index . --url "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" --merge index.yaml
+          else
+            helm repo index . --url "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          fi
+
+          git add .
+          git diff --cached --quiet || git commit -m "chore: publish dev chart ${{ steps.version.outputs.version }}"
+          git push origin gh-pages
