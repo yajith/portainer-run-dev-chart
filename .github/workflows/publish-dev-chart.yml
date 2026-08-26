@@ -9,6 +9,10 @@ on:
         description: 'Git ref in portainer/portainer-run to package (default: develop)'
         required: false
         default: develop
+      chart_version:
+        description: 'Exact semver to publish instead of the 0.0.0-dev.<sha> scheme (e.g. 1.3.1). Leave empty for the normal dev snapshot.'
+        required: false
+        default: ''
   schedule:
     # Poll once a day so the dev chart stays reasonably fresh even without
     # an explicit trigger.
@@ -48,8 +52,16 @@ jobs:
         run: |
           sha=$(git -C /tmp/source-repo rev-parse --short HEAD)
           echo "sha=${sha}" >> "$GITHUB_OUTPUT"
-          # Use a 0.0.0-dev pre-release so it sorts below every real release.
-          echo "version=0.0.0-dev.${sha}" >> "$GITHUB_OUTPUT"
+          override="${{ github.event.inputs.chart_version }}"
+          if [ -n "$override" ]; then
+            # Explicit override: publish under an exact semver (no pre-release
+            # suffix) so it resolves in the Portainer addon settings page,
+            # which filters out non-semver and pre-release chart versions.
+            echo "version=${override}" >> "$GITHUB_OUTPUT"
+          else
+            # Use a 0.0.0-dev pre-release so it sorts below every real release.
+            echo "version=0.0.0-dev.${sha}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Stamp dev version into Chart.yaml
         run: |
