@@ -1,0 +1,16 @@
+apiVersion: v2
+name: portainer
+description: A Helm chart for deploying Portainer (dev/testing)
+type: application
+version: 0.1.0
+appVersion: "2.21.0"
+keywords:
+  - portainer
+  - docker
+  - kubernetes
+  - container-management
+home: https://www.portainer.io
+sources:
+  - https://github.com/portainer/portainer
+maintainers:
+  - name: portainer
