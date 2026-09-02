@@ -3,7 +3,7 @@ entries:
   portainer-run:
   - apiVersion: v2
     appVersion: 1.3.1
-    created: "2026-09-01T08:19:01.559828148Z"
+    created: "2026-09-02T07:39:23.410525487Z"
     description: Portainer-Run — AI-assisted deployment companion for Portainer, served
       as a Portainer addon.
     digest: 73d93e99204c7a614ae8bd0709effdd2114b51976f11ca592a434e97dde437c0
@@ -14,7 +14,7 @@ entries:
     version: 1.3.1
   - apiVersion: v2
     appVersion: 0.0.0-dev.80e6897
-    created: "2026-09-01T08:19:01.559505993Z"
+    created: "2026-09-02T07:39:23.410233412Z"
     description: Portainer-Run — AI-assisted deployment companion for Portainer, served
       as a Portainer addon.
     digest: f102c2f96319b057a7bbeb00b677e479f40ea1b408f946078a738ba5708fe860
@@ -25,7 +25,7 @@ entries:
     version: 0.0.0-dev.80e6897
   - apiVersion: v2
     appVersion: 0.0.0-dev.7d4d434
-    created: "2026-09-01T08:19:01.559140688Z"
+    created: "2026-09-02T07:39:23.409895971Z"
     description: Portainer-Run — AI-assisted deployment companion for Portainer, served
       as a Portainer addon.
     digest: 55c37a53efab846e907bf66d1039703e76ee0bb5b07c8b4cbda79784304dc31a
@@ -36,13 +36,13 @@ entries:
     version: 0.0.0-dev.7d4d434
   - apiVersion: v2
     appVersion: 0.0.0-dev.79ef36f
-    created: "2026-09-01T08:19:01.558812222Z"
+    created: "2026-09-02T07:39:23.409581774Z"
     description: Portainer-Run — AI-assisted deployment companion for Portainer, served
       as a Portainer addon.
-    digest: df7987009bcb3a6748185d4a0f6eedb5841b76c080b2ac2cf6e4ef4f98d280e4
+    digest: c6a93c21eb7af6f04f5e8c5ca866aeb7209706f1a203257b33c88fe917211d55
     name: portainer-run
     type: application
     urls:
     - https://yajith.github.io/portainer-run-dev-chart/portainer-run-0.0.0-dev.79ef36f.tgz
     version: 0.0.0-dev.79ef36f
-generated: "2026-09-01T08:19:01.558404638Z"
+generated: "2026-09-02T07:39:23.40908138Z"
