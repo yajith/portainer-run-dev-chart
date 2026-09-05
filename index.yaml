@@ -3,7 +3,7 @@ entries:
   portainer-run:
   - apiVersion: v2
     appVersion: 1.3.1
-    created: "2026-09-04T07:44:08.818334314Z"
+    created: "2026-09-05T07:25:35.328948643Z"
     description: Portainer-Run — AI-assisted deployment companion for Portainer, served
       as a Portainer addon.
     digest: 73d93e99204c7a614ae8bd0709effdd2114b51976f11ca592a434e97dde437c0
@@ -14,7 +14,7 @@ entries:
     version: 1.3.1
   - apiVersion: v2
     appVersion: 0.0.0-dev.80e6897
-    created: "2026-09-04T07:44:08.818056969Z"
+    created: "2026-09-05T07:25:35.328185776Z"
     description: Portainer-Run — AI-assisted deployment companion for Portainer, served
       as a Portainer addon.
     digest: f102c2f96319b057a7bbeb00b677e479f40ea1b408f946078a738ba5708fe860
@@ -25,7 +25,7 @@ entries:
     version: 0.0.0-dev.80e6897
   - apiVersion: v2
     appVersion: 0.0.0-dev.7d4d434
-    created: "2026-09-04T07:44:08.81773017Z"
+    created: "2026-09-05T07:25:35.327366308Z"
     description: Portainer-Run — AI-assisted deployment companion for Portainer, served
       as a Portainer addon.
     digest: 55c37a53efab846e907bf66d1039703e76ee0bb5b07c8b4cbda79784304dc31a
@@ -36,7 +36,7 @@ entries:
     version: 0.0.0-dev.7d4d434
   - apiVersion: v2
     appVersion: 0.0.0-dev.79ef36f
-    created: "2026-09-04T07:44:08.81741861Z"
+    created: "2026-09-05T07:25:35.327048763Z"
     description: Portainer-Run — AI-assisted deployment companion for Portainer, served
       as a Portainer addon.
     digest: c6a93c21eb7af6f04f5e8c5ca866aeb7209706f1a203257b33c88fe917211d55
@@ -47,13 +47,13 @@ entries:
     version: 0.0.0-dev.79ef36f
   - apiVersion: v2
     appVersion: 0.0.0-dev.4352a15
-    created: "2026-09-04T07:44:08.817113683Z"
+    created: "2026-09-05T07:25:35.326732149Z"
     description: Portainer-Run — AI-assisted deployment companion for Portainer, served
       as a Portainer addon.
-    digest: 979d063687be78ce8d29550506d9a6ff80a7746e9d01a95fb158daa387df1ecd
+    digest: 4bdeaa78b960a31ac3424f912836de069151e9607071316f3165e067a2d74dc6
     name: portainer-run
     type: application
     urls:
     - https://yajith.github.io/portainer-run-dev-chart/portainer-run-0.0.0-dev.4352a15.tgz
     version: 0.0.0-dev.4352a15
-generated: "2026-09-04T07:44:08.81665508Z"
+generated: "2026-09-05T07:25:35.326320747Z"
